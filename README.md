@@ -126,7 +126,7 @@ Seaker-Alert-App/
 > 🟢 Running Demo (If Deployed)
 
 🔗 [seaker-alert-app-production.up.railway.app](seaker-alert-app-production.up.railway.app)
-*(Replace this with your actual deployment link if hosted)*
+
 
 ---
 

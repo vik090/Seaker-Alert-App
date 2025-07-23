@@ -125,7 +125,7 @@ Seaker-Alert-App/
 
 > 🟢 Running Demo (If Deployed)
 
-🔗 [https://seaker-alert-app-demo.vercel.app](https://seaker-alert-app-demo.vercel.app)
+🔗 [seaker-alert-app-production.up.railway.app](seaker-alert-app-production.up.railway.app)
 *(Replace this with your actual deployment link if hosted)*
 
 ---

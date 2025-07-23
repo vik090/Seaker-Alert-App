@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Seaker Alert Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f9fa;
+            color: #333;
+            margin: 20px;
+        }
+        h1, h2 {
+            color: #0066cc;
+        }
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+    </style>
+    <script>
+        async function loadMetrics() {
+            const res = await fetch("/metrics");
+            const result = await res.json();
+            const data = result.metrics;
+            const alerts = result.alerts;
+
+            document.getElementById("cpu").innerText = data["CPU (%)"] + " %";
+            document.getElementById("ram").innerText = data["RAM Used (GB)"] + " / " + data["RAM Total (GB)"] + " GB";
+            document.getElementById("disk").innerText = data["Disk Used (GB)"] + " / " + data["Disk Total (GB)"] + " GB";
+            document.getElementById("uptime").innerText = data["Uptime (hours)"] + " hrs";
+            document.getElementById("temp").innerText = data["Temperature (°C)"];
+
+            // Display alerts
+            const alertBox = document.getElementById("alerts");
+            alertBox.innerHTML = "";
+            if (alerts.length > 0) {
+                alerts.forEach(msg => {
+                    const li = document.createElement("li");
+                    li.innerText = msg;
+                    li.style.color = "red";
+                    alertBox.appendChild(li);
+                });
+            } else {
+                const li = document.createElement("li");
+                li.innerText = "✅ All systems normal";
+                li.style.color = "green";
+                alertBox.appendChild(li);
+            }
+
+            // Load history
+            const historyRes = await fetch("/history");
+            const historyData = await historyRes.json();
+            const historyBox = document.getElementById("history");
+            historyBox.innerHTML = "";
+            historyData.forEach(record => {
+                const li = document.createElement("li");
+                li.innerText = `${record.timestamp} — CPU: ${record.cpu}% | RAM: ${record.ram} GB | Disk: ${record.disk} GB`;
+                historyBox.appendChild(li);
+            });
+        }
+
+        setInterval(loadMetrics, 3000); // refresh every 3 seconds
+        window.onload = loadMetrics;
+    </script>
+</head>
+<body>
+    <h1>📊 Seaker Alert System Dashboard</h1>
+
+    <h2>📍 Live Metrics</h2>
+    <ul>
+        <li><strong>CPU Usage:</strong> <span id="cpu"></span></li>
+        <li><strong>RAM Usage:</strong> <span id="ram"></span></li>
+        <li><strong>Disk Usage:</strong> <span id="disk"></span></li>
+        <li><strong>Uptime:</strong> <span id="uptime"></span></li>
+        <li><strong>Temperature:</strong> <span id="temp"></span></li>
+    </ul>
+
+    <h2>🔔 Alerts</h2>
+    <ul id="alerts"></ul>
+
+    <h2>📈 History (Last 10 Records)</h2>
+    <ul id="history"></ul>
+</body>
+</html>
